@@ -34,7 +34,7 @@
 
 if [ "$1" = "configure" ]
 then
-	eval "$(univention-config-registry shell locale/default firefox/prefs/homepage)"
+	eval "$(univention-config-registry shell locale/default firefox/prefs/homepage firefox/prefs/conffile)"
 	case "${locale_default:-}" in
 	de_*) lang='de-DE' tld='de' ;;
 	*) lang='en-US' tld='com' ;;
@@ -49,11 +49,13 @@ then
 	then
 		mkdir -p /etc/univention/skel/Downloads
 		firefox_prefs_homepage="https://www.univention.$tld/"
+		firefox_prefs_conffile="univention.cfg"
 	fi
 
 	univention-config-registry set \
 		firefox/prefs/spellchecker/dictionary="$Lang" \
 		${firefox_prefs_homepage:+firefox/prefs/homepage="$firefox_prefs_homepage"} \
+		${firefox_prefs_conffile:+firefox/prefs/conffile="$firefox_prefs_conffile"} \
 		firefox/prefs/checkdefaultbrowser?false
 fi
 

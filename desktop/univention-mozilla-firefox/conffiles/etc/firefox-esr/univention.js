@@ -1,5 +1,6 @@
 @%@UCRWARNING=// @%@
 
+pref("general.config.obscure_value", 0);
 @!@
 for ffconf, ucrv in {
 	'general.config.filename': 'firefox/prefs/conffile',
