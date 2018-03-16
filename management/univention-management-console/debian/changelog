@@ -1,3 +1,9 @@
+univention-management-console (10.0.4-6) unstable; urgency=medium
+
+  * Bug #46476: change loglevel of failed memberof query
+
+ -- Jannik Ahlers <ahlers@univention.de>  Fri, 16 Mar 2018 14:17:40 +0100
+
 univention-management-console (10.0.4-5) unstable; urgency=medium
 
   * Bug #45599: Remove deprecated child-src from Content-Security-Policy
