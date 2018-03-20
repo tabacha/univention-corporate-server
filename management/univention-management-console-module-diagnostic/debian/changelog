@@ -1,3 +1,9 @@
+univention-management-console-module-diagnostic (4.0.0-23) unstable; urgency=medium
+
+  * Bug #46166: fix broken links to univention support database
+
+ -- Jannik Ahlers <ahlers@univention.de>  Tue, 20 Mar 2018 11:30:58 +0100
+
 univention-management-console-module-diagnostic (4.0.0-22) unstable; urgency=medium
 
   *  Bug #46708: Avoid paramico log messages winding up in connector-s4.log
