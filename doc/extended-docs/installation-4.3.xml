@@ -1205,18 +1205,33 @@ univention-system-setup-boot uss/server/role string memberserver
 			Any questions not answered in the pre-seed file forces the installer to interactive mode.
 		</para>
 		<para>
-			Univention Net Installer requires a local repository as a package source.
+			Univention Net Installer can either directly use the repository server <ulink url="https://updates.software-univention.de/"/> or a local repository.
+			The later one is advisable as it reduces the amount of data needing to be downloaded for each installation.
 		</para>
-		<important>
-			<para>
-				The repository must be created using the DVD (image) of the targeted UCS release.
-				This is done by running the command <command>univention-repository-create</command>, which copies the corresponding PXE kernel and installer to <filename class="directory">/var/lib/univention-client-boot/installer/<replaceable>release</replaceable>/</filename>.
-			</para>
-		</important>
+		<para>
+			The local repository must be initialized using the DVD (image) of the targeted UCS release.
+			This is done by running the command <command>univention-repository-create</command>, which copies the corresponding PXE kernel and installer to <filename class="directory">/var/lib/univention-client-boot/installer/<replaceable>release</replaceable>/</filename>.
+		</para>
 		<para>
 			It is safe to run <command>univention-repository-create</command> again, which is for example required to update the installer to a newer version of UCS.
 			For more information on local repositories see the software deployment chapter of the <biblioref linkend="ucs-manual"/>.
 		</para>
+		<important>
+			<para>
+				Afterwards the repository must be updated at least once using the command <command>univention-repository-update net</command>.
+				This is required as the DVD does not contain the <filename>Release</filename> files and their cryptographic signatures.
+			</para>
+			<para>
+				The command will download all previous UCS minor and patch-level releases of the same major branch.
+				Each minor release requires several gigabytes of storage space in <filename class="directory">/var/lib/univention-repository/</filename>
+				Even more space is required if the section <emphasis>unmaintained</emphasis> is enabled!
+			</para>
+			<para>
+				Verify the &ucsUCRV; <envar>repository/mirror/recreate_packages</envar> is set to <literal>no</literal>.
+				Otherwise the <filename>Packages</filename> will be re-build, which invalidates the cryptographic signatures.
+				Locally re-build index files will also have different package priorities as the <emphasis>overwrite</emphasis> information is not publicly available.
+			</para>
+		</important>
 		<para>
 			The profiles should be copied into the directory <filename class="directory">/var/lib/univention-client-boot/preseed/</filename> on the repository server, which is accessible through <uri>http://<replaceable>HOST-NAME</replaceable>/univention-client-boot/preseed/</uri>.
 		</para>
