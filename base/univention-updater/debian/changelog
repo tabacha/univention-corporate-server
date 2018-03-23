@@ -1,3 +1,9 @@
+univention-updater (13.0.1-41) unstable; urgency=low
+
+  * Bug #46600: Fix local repository dists Packages setup
+
+ -- Philipp Hahn <hahn@univention.de>  Fri, 23 Mar 2018 14:52:40 +0100
+
 univention-updater (13.0.1-40) unstable; urgency=medium
 
   * Bug #46166: update dead links from sdb to documentation
