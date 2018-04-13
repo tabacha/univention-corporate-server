@@ -65,3 +65,4 @@ do
 done
 
 ssh-keygen -A
+exec /usr/sbin/univention-openssh-upload-host-keys

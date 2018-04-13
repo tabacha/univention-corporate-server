@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# Univention SSH join script
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright 2018 Univention GmbH
+set -e -u
+
+VERSION=1
+. /usr/share/univention-join/joinscripthelper.lib
+joinscript_init
+
+/usr/sbin/univention-openssh-upload-host-keys
+
+joinscript_save_current_version
+
+exit 0

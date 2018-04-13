@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# Upload SSH host keys to LDAP machine account
+#
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright 2018 Univention GmbH
+set -e -u
+
+die () {
+	echo "${0##*/}: $*" >&2
+	exit 1
+}
+
+[ -e /var/univention-join/joined ] ||
+	die "System is not yet joined"
+[ -r /etc/machine.secret ] ||
+	die "Missing /etc/machine.secret"
+
+eval "$(ucr shell ldap/master ldap/master/port ldap/base ldap/hostdn)" ||
+	die "Failed to get UCR variables"
+
+tmp="$(mktemp)"
+trap "rm -f '$tmp'" EXIT
+exec >"$tmp"
+cat <<__LDIF__
+dn: $ldap_hostdn
+changetype: modify
+replace: univentionSshHostKey
+__LDIF__
+for key in /etc/ssh/ssh_host_*_key.pub
+do
+	[ -f "$key" ] ||
+		die "No SSH host keys /etc/ssh/ssh_host_*_key.pub found"
+	echo "univentionSshHostKey:< file://$key"
+done
+exec >&-
+
+ldapmodify \
+	-x \
+	-ZZ \
+	-h "$ldap_master" \
+	-p "${ldap_master_port:-7389}" \
+	-D "$ldap_hostdn" \
+	-y /etc/machine.secret \
+	-f "$tmp"
