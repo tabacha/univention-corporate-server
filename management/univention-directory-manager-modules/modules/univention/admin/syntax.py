@@ -3726,6 +3726,29 @@ __register_choice_update_function(Country.update_choices)
 Country.update_choices()
 
 
+class sshHostKeyAlgorithm(select):
+	choices = [
+		('0', _('Reverved')),
+		('1', 'RSA'),
+		('2', 'DSA'),
+		('3', 'ECDSA'),
+		('4', 'ED25519'),
+	]
+
+
+class sshHostKeyType(select):
+	choices = [
+		('0', _('Reverved')),
+		('1', 'SHA-1'),
+		('2', 'SHA-256'),
+	]
+
+
+class sshHostKeyHash(string):
+	regex = re.compile(r'^(?:[0-9A-Fa-f]{2})*$')
+	error_message = _('Invalid base64 encoded srting')
+
+
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
