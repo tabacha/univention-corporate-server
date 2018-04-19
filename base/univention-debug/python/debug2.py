@@ -125,10 +125,11 @@ _logger_level = {}
 # set default level for each logger
 for key in _map_id_old2new.values():
 	_logger_level[key] = _map_lvl_old2new[DEFAULT]
+del key
 
 
 def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
-	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
+	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog
 
 	_logfilename = logfilename
 
@@ -191,13 +192,11 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 
 
 def reopen():
-	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 	logging.getLogger('MAIN').log(100, 'DEBUG_REINIT')
 	init(_logfilename, _do_flush, _enable_function, _enable_syslog)
 
 
 def set_level(id, level):
-	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	if level > ALL:
 		level = ALL
@@ -213,12 +212,11 @@ def get_level(id):
 
 
 def set_function(activated):
-	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
+	global _enable_function
 	_enable_function = activated
 
 
 def debug(id, level, msg, utf8=True):
-	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	new_level = _map_lvl_old2new[level]
 	if new_level >= _logger_level[new_id]:
@@ -233,7 +231,6 @@ def debug(id, level, msg, utf8=True):
 class function:
 
 	def __init__(self, text, utf8=True):
-		global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 		self.text = text
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_BEGIN : ' + self.text)
@@ -244,7 +241,6 @@ class function:
 						handler.flush()
 
 	def __del__(self):
-		global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_END   : ' + self.text)
 			# flush if requested
