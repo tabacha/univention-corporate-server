@@ -207,6 +207,11 @@ def set_level(id, level):
 	_logger_level[new_id] = new_level
 
 
+def get_level(id):
+	new_id = _map_id_old2new.get(id, 'MAIN')
+	return _logger_level[new_id]
+
+
 def set_function(activated):
 	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog, _logger_level
 	_enable_function = activated
