@@ -1,0 +1,11 @@
+product: ucs
+release: "4.3"
+version: [0]
+scope: ucs_4.3-0-errata4.3-0
+src: univention-debug
+fix: 
+desc: |
+ This update addresses the following issue:
+ * Update the Python-only implementation to be en-par with the native C
+   implementation.
+bug: [46100]
