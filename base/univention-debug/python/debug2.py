@@ -129,6 +129,13 @@ del key
 
 
 def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
+	"""
+	Initialize debugging library for logging to 'logfile', forcing 'flush' and tracing 'function's.
+
+	:param str logfilename:  name of the logfile, or 'stderr', or 'stdout'.
+	:param bool do_flush: force flushing of messages (True).
+	:param bool enable_function: enable (True) or disable (False) function tracing.
+	"""
 	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog
 
 	_logfilename = logfilename
@@ -155,7 +162,7 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 			_handler_console.setFormatter(formatter)
 			logging.getLogger('').addHandler(_handler_console)
 		except:
-			print 'opening %s failed' % logfilename
+			print('opening %s failed' % logfilename)
 	else:
 		if _handler_file:
 			logging.getLogger('').removeHandler(_handler_file)
@@ -167,7 +174,7 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 			_handler_file.setFormatter(formatter)
 			logging.getLogger('').addHandler(_handler_file)
 		except:
-			print 'opening %s failed' % logfilename
+			print('opening %s failed' % logfilename)
 
 # 	if enable_syslog:
 # 		try:
@@ -192,11 +199,20 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 
 
 def reopen():
+	"""
+	Close and re-open the debug logfile.
+	"""
 	logging.getLogger('MAIN').log(100, 'DEBUG_REINIT')
 	init(_logfilename, _do_flush, _enable_function, _enable_syslog)
 
 
 def set_level(id, level):
+	"""
+	Set minimum required severity 'level' for facility 'id'.
+
+	:param int id: ID of the category, e.g. MAIN, LDAP, USERS, ...
+	:param int level: Level of logging, e.g. ERROR, WARN, PROCESS, INFO, ALL
+	"""
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	if level > ALL:
 		level = ALL
@@ -207,16 +223,34 @@ def set_level(id, level):
 
 
 def get_level(id):
+	"""
+	Get minimum required severity for facility 'category'.
+
+	:param int id: ID of the category, e.g. MAIN, LDAP, USERS, ...
+	"""
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	return _logger_level[new_id]
 
 
 def set_function(activated):
+	"""
+	Enable or disable the logging of function begins and ends.
+
+	:param bool activated: enable (True) or disable (False) function tracing.
+	"""
 	global _enable_function
 	_enable_function = activated
 
 
 def debug(id, level, msg, utf8=True):
+	"""
+	Log message 'message' of severity 'level' to facility 'category'.
+
+	:param int id: ID of the category, e.g. MAIN, LDAP, USERS, ...
+	:param int level: Level of logging, e.g. ERROR, WARN, PROCESS, INFO, ALL
+	:param str message: The message to log
+	:param bool utf8: Assume the messate is UTF-8 encoded.
+	"""
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	new_level = _map_lvl_old2new[level]
 	if new_level >= _logger_level[new_id]:
@@ -231,6 +265,13 @@ def debug(id, level, msg, utf8=True):
 class function:
 
 	def __init__(self, text, utf8=True):
+		"""
+		Log the begin of function 'function'.
+
+		:param str text: name of the function starting.
+		:param bool utf8: Assume the messate is UTF-8 encoded.
+		"""
+		self.text = function
 		self.text = text
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_BEGIN : ' + self.text)
@@ -241,6 +282,9 @@ class function:
 						handler.flush()
 
 	def __del__(self):
+		"""
+		Log the end of function.
+		"""
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_END   : ' + self.text)
 			# flush if requested
