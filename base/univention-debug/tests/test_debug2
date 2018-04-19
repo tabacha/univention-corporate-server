@@ -1,0 +1,4 @@
+#!/bin/sh
+LD_LIBRARY_PATH="$top_builddir/lib/.libs/" \
+PYTHONPATH="$top_builddir/build/lib.linux-$(arch)-$PYTHON_VERSION/univention" \
+exec "$PYTHON" "$srcdir/test_debug2.py"
