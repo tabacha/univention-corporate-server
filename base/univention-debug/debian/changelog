@@ -1,3 +1,9 @@
+univention-debug (10.0.0-4) unstable; urgency=low
+
+  * Bug #46100: Add missing log targets to debug2.py
+
+ -- Philipp Hahn <hahn@univention.de>  Thu, 19 Apr 2018 07:27:29 +0200
+
 univention-debug (10.0.0-3) unstable; urgency=medium
 
   * Bug #43336: remove XS-Python-Version
