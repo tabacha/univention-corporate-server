@@ -252,11 +252,7 @@ def debug(id, level, msg, utf8=True):
 	new_level = _map_lvl_old2new[level]
 	if new_level >= _logger_level[new_id]:
 		logging.getLogger(new_id).log(new_level, msg)
-		# flush if requested
-		if _do_flush:
-			for handler in [_handler_console, _handler_file, _handler_syslog]:
-				if handler:
-					handler.flush()
+		__flush()
 
 
 class function:
@@ -271,11 +267,7 @@ class function:
 		self.text = text
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_BEGIN : ' + self.text)
-			# flush if requested
-			if _do_flush:
-				for handler in [_handler_console, _handler_file, _handler_syslog]:
-					if handler:
-						handler.flush()
+			__flush()
 
 	def __del__(self):
 		"""
@@ -283,8 +275,14 @@ class function:
 		"""
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_END   : ' + self.text)
-			# flush if requested
-			if _do_flush:
-				for handler in [_handler_console, _handler_file, _handler_syslog]:
-					if handler:
-						handler.flush()
+			__flush()
+
+
+def __flush():
+	"""
+	Flushing all messages.
+	"""
+	if _do_flush:
+		for handler in [_handler_console, _handler_file, _handler_syslog]:
+			if handler:
+				handler.flush()
