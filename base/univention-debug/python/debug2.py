@@ -135,6 +135,7 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 	:param str logfilename:  name of the logfile, or 'stderr', or 'stdout'.
 	:param bool do_flush: force flushing of messages (True).
 	:param bool enable_function: enable (True) or disable (False) function tracing.
+	:param bool enable_syslog: enable (True) or disable (False) logging to SysLog.
 	"""
 	global _logfilename, _handler_console, _handler_file, _handler_syslog, _do_flush, _enable_function, _enable_syslog
 
@@ -162,7 +163,7 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 			_handler_console.setFormatter(formatter)
 			logging.getLogger('').addHandler(_handler_console)
 		except:
-			print('opening %s failed' % logfilename)
+			print('opening %s failed' % (logfilename,))
 	else:
 		if _handler_file:
 			logging.getLogger('').removeHandler(_handler_file)
@@ -174,7 +175,7 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 			_handler_file.setFormatter(formatter)
 			logging.getLogger('').addHandler(_handler_file)
 		except:
-			print('opening %s failed' % logfilename)
+			print('opening %s failed' % (logfilename,))
 
 # 	if enable_syslog:
 # 		try:
@@ -227,6 +228,8 @@ def get_level(id):
 	Get minimum required severity for facility 'category'.
 
 	:param int id: ID of the category, e.g. MAIN, LDAP, USERS, ...
+	:return: Return debug level of category.
+	:rtype: int
 	"""
 	new_id = _map_id_old2new.get(id, 'MAIN')
 	return _logger_level[new_id]
@@ -248,7 +251,7 @@ def debug(id, level, msg, utf8=True):
 
 	:param int id: ID of the category, e.g. MAIN, LDAP, USERS, ...
 	:param int level: Level of logging, e.g. ERROR, WARN, PROCESS, INFO, ALL
-	:param str message: The message to log
+	:param str msg: The message to log
 	:param bool utf8: Assume the messate is UTF-8 encoded.
 	"""
 	new_id = _map_id_old2new.get(id, 'MAIN')
@@ -271,7 +274,6 @@ class function:
 		:param str text: name of the function starting.
 		:param bool utf8: Assume the messate is UTF-8 encoded.
 		"""
-		self.text = function
 		self.text = text
 		if _enable_function:
 			logging.getLogger('MAIN').log(100, 'UNIVENTION_DEBUG_BEGIN : ' + self.text)
