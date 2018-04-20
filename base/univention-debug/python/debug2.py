@@ -150,20 +150,14 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 	formatter = logging.Formatter(_outfmt, _datefmt)
 	if logfilename == 'stderr' or logfilename == 'stdout':
 		# add stderr or stdout handler
-		try:
-			if _handler_console:
-				logging.getLogger('').removeHandler(_handler_console)
-				_handler_console = None
+		if _handler_console:
+			logging.getLogger('').removeHandler(_handler_console)
+			_handler_console = None
 
-			if logfilename == 'stdout':
-				_handler_console = logging.StreamHandler(sys.stdout)
-			else:
-				_handler_console = logging.StreamHandler(sys.stderr)
-			_handler_console.setLevel(logging.DEBUG)
-			_handler_console.setFormatter(formatter)
-			logging.getLogger('').addHandler(_handler_console)
-		except:
-			print('opening %s failed' % (logfilename,))
+		_handler_console = logging.StreamHandler(sys.stdout if logfilename == 'stdout' else sys.stderr)
+		_handler_console.setLevel(logging.DEBUG)
+		_handler_console.setFormatter(formatter)
+		logging.getLogger('').addHandler(_handler_console)
 	else:
 		if _handler_file:
 			logging.getLogger('').removeHandler(_handler_file)
@@ -174,8 +168,8 @@ def init(logfilename, do_flush=0, enable_function=0, enable_syslog=0):
 			_handler_file.setLevel(logging.DEBUG)
 			_handler_file.setFormatter(formatter)
 			logging.getLogger('').addHandler(_handler_file)
-		except:
-			print('opening %s failed' % (logfilename,))
+		except EnvironmentError as ex:
+			print('opening %s failed: %s' % (logfilename, ex))
 
 # 	if enable_syslog:
 # 		try:
