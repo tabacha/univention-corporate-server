@@ -62,11 +62,17 @@ class UniFileHandler(TimedRotatingFileHandler):
 	Configuration can be done through the `handler_kwargs` argument of
 	:py:func:`get_listener_logger`.
 	"""
-	_listener_uid = pwd.getpwnam('listener').pw_uid
-	_adm_gid = grp.getgrnam('adm').gr_gid
+	_listener_uid = None
+	_adm_gid = None
 
 	def _open(self):
 		stream = super(UniFileHandler, self)._open()
+
+		if self._listener_uid is None:
+			self._listener_uid = pwd.getpwnam('listener').pw_uid
+		if self._adm_gid is None:
+			self._adm_gid = grp.getgrnam('adm').gr_gid
+
 		file_stat = os.fstat(stream.fileno())
 		if file_stat.st_uid != self._listener_uid or file_stat.st_gid != self._adm_gid:
 			old_uid = os.geteuid()
