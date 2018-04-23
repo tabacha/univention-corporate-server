@@ -40,7 +40,7 @@ from ldap.filter import filter_format
 import univention.config_registry
 import univention.debug
 
-__all__ = ('configRegistry', 'ucr_overwrite_properties', 'pattern_replace', 'property', 'option', 'ucr_overwrite_module_layout', 'ucr_overwrite_layout', 'extended_attribute', 'tab', 'field', 'policiesGroup', 'modules', 'objects', 'syntax', 'hook', 'mapping')
+__all__ = ('configRegistry', 'ucr_overwrite_properties', 'pattern_replace', 'property', 'option', 'ucr_overwrite_module_layout', 'ucr_overwrite_layout', 'extended_attribute', 'tab', 'field', 'policiesGroup')
 
 
 configRegistry = univention.config_registry.ConfigRegistry()
@@ -506,15 +506,3 @@ class policiesGroup:
 			self.short_description = short_description
 		self.long_description = long_description
 		self.members = members
-
-
-univention.admin = sys.modules[__name__]
-from univention.admin import modules, objects, syntax, hook, mapping
-syntax.import_syntax_files()
-hook.import_hook_files()
-
-if __name__ == '__main__':
-	prop = property('_replace')
-	for pattern in ('<firstname>', '<firstname> <lastname>', '<firstname:upper>', '<:trim,upper><firstname> <lastname>     ', '<:lower><firstname> <lastname>', '<:umlauts><firstname> <lastname>'):
-		print "pattern: '%s'" % pattern
-		print " -> '%s'" % prop._replace(pattern, {'firstname': 'Andreas', 'lastname': 'Büsching'})
