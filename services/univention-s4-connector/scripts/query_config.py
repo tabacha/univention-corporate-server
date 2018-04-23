@@ -33,7 +33,6 @@
 
 
 import ConfigParser
-import cPickle
 import os
 
 
