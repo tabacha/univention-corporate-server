@@ -59,22 +59,20 @@ from ldap.filter import filter_format, escape_filter_chars
 translation = localization.translation('univention/admin')
 _ = translation.translate
 
-#
-# load all additional syntax files from */site-packages/univention/admin/syntax.d/*.py
-#
-
 
 def import_syntax_files():
+	"""
+	Load all additional syntax files :file:`syntax.d/*.py`.
+	"""
 	global _  # don't allow syntax to overwrite our global _ function.
 	gettext = _
-	for dir_ in sys.path:
-		syntax_py = os.path.join(dir_, 'univention/admin/syntax.py')
-		syntax_d = os.path.join(dir_, 'univention/admin/syntax.d/')
-
-		if os.path.exists(syntax_py) and os.path.isdir(syntax_d):
-			syntax_files = (os.path.join(syntax_d, f) for f in os.listdir(syntax_d) if f.endswith('.py'))
-
-			for fn in syntax_files:
+	syntax_d = os.path.join(os.path.dirname(__file__), 'syntax.d')
+	if not os.path.isdir(syntax_d):
+		return
+	for f in os.listdir(syntax_d):
+				if not f.endswith('.py'):
+					continue
+				fn = os.path.join(syntax_d, f)
 				try:
 					with open(fn, 'r') as fd:
 						exec fd in sys.modules[__name__].__dict__
@@ -3724,6 +3722,9 @@ class Country(select):
 
 __register_choice_update_function(Country.update_choices)
 Country.update_choices()
+
+
+import_syntax_files()
 
 
 if __name__ == '__main__':

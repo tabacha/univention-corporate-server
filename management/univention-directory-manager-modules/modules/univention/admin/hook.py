@@ -41,18 +41,18 @@ import traceback
 translation = localization.translation('univention/admin')
 _ = translation.translate
 
-#
-# load all additional hook files from */site-packages/univention/admin/hooks.d/*.py
-#
-
 
 def import_hook_files():
-	for dir in sys.path:
-		if os.path.exists(os.path.join(dir, 'univention/admin/hook.py')):
-			if os.path.isdir(os.path.join(dir, 'univention/admin/hooks.d/')):
-				for f in os.listdir(os.path.join(dir, 'univention/admin/hooks.d/')):
-					if f.endswith('.py'):
-						fn = os.path.join(dir, 'univention/admin/hooks.d/', f)
+	"""
+	Load all additional hook files :file:`hooks.d/*.py`.
+	"""
+	base = os.path.join(os.path.dirname(__file__), 'hooks.d')
+	if not os.path.isdir(base):
+		return
+	for f in os.listdir(base):
+						if not f.endswith('.py'):
+							continue
+						fn = os.path.join(base, f)
 						try:
 							with open(fn, 'r') as fd:
 								exec fd in sys.modules[__name__].__dict__
@@ -98,3 +98,6 @@ class simpleHook(object):
 
 	def hook_ldap_post_remove(self, obj):
 		univention.debug.debug(univention.debug.ADMIN, univention.debug.INFO, 'admin.syntax.hook.simpleHook: _ldap_post_remove called')
+
+
+import_hook_files()
