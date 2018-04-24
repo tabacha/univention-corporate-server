@@ -3734,6 +3734,7 @@ class sshHostKeyAlgorithm(select):
 		('3', 'ECDSA'),
 		('4', 'ED25519'),
 	]
+	size = 'Half'
 
 
 class sshHostKeyType(select):
@@ -3742,6 +3743,7 @@ class sshHostKeyType(select):
 		('1', 'SHA-1'),
 		('2', 'SHA-256'),
 	]
+	size = 'Half'
 
 
 class sshHostKeyHash(string):
@@ -3756,6 +3758,7 @@ class dnsSSHFP(complex):
 		(_('Fingerprint type'), sshHostKeyType),
 		(_('Fingerprint hash'), sshHostKeyHash),
 	]
+	size = ('Half', 'Half', 'One')
 	all_required = True
 
 
