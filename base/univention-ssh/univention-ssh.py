@@ -24,6 +24,7 @@ import listener
 from os import fchmod
 from subprocess import check_call
 from ipaddr import IPv6Address
+import univention.debug as ud
 
 SKH = '/etc/ssh/ssh_known_hosts'
 
@@ -32,6 +33,7 @@ def initialize():
 	"""
 	Initialize UCS Listener module.
 	"""
+	ud.debug(ud.LISTENER, ud.PROCESS, "initialize()")
 	with AsRoot():
 		with open(SKH, 'a') as skh:
 			fchmod(skh.fileno(), 0o644)
@@ -46,6 +48,7 @@ def handler(dn, new, old, command=''):
 	:param dict old: The old LDAP values or None.
 	:param str command: A single letter command specifying the LDAP operation.
 	"""
+	ud.debug(ud.LISTENER, ud.PROCESS, "handler(dn=%s new=%d old=%d command=%s)" % (dn, len(new), len(old), command))
 	remove_old(old)
 	add_new(new)
 
@@ -56,6 +59,7 @@ def remove_old(old):
 
 	:param dict old: The old LDAP values
 	"""
+	ud.debug(ud.LISTENER, ud.PROCESS, "remove_old(old=%d)" % (len(old),))
 	if not old:
 		return
 	with AsRoot():
@@ -69,6 +73,7 @@ def add_new(new):
 
 	:param dict new: The new LDAP values
 	"""
+	ud.debug(ud.LISTENER, ud.PROCESS, "add_new(new=%d)" % (len(new),))
 	if not new:
 		return
 	if 'univentionSshHostKey' not in new:
@@ -90,14 +95,20 @@ def names(values):
 	:param dict values: The old or new LDAP values.
 	:returns: An iterator returning all names.
 	"""
-	yield values['cn'][0]
+	val = values['cn'][0]
+	ud.debug(ud.LISTENER, ud.PROCESS, "names: cn=%s" % (val,))
+	yield val
 	try:
-		yield '%s.%s' % (values['cn'][0], values['associatedDomain'][0])
+		val = '%s.%s' % (values['cn'][0], values['associatedDomain'][0])
+		ud.debug(ud.LISTENER, ud.PROCESS, "names: fqdn=%s" % (val,))
+		yield val
 	except LookupError:
 		pass
 	for ip in values.get('aRecord', []):
+		ud.debug(ud.LISTENER, ud.PROCESS, "names: IPv4=%s" % (ip,))
 		yield ip
 	for ip in values.get('aAAARecord', []):
+		ud.debug(ud.LISTENER, ud.PROCESS, "names: IPv6=%s" % (ip,))
 		yield '%s' % (IPv6Address(ip),)
 
 
