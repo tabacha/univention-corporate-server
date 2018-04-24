@@ -12,6 +12,7 @@ import univention.admin.filter
 import univention.admin.handlers
 import univention.admin.handlers.dns.forward_zone
 import univention.admin.localization
+from univention.admin.handlers.dns import unmapSSHFP, mapSSHFP
 
 translation = univention.admin.localization.translation('univention.admin.handlers.dns')
 _ = translation.translate
@@ -64,30 +65,6 @@ layout = [
 		]),
 	]),
 ]
-
-
-def unmapSSHFP(values):
-	"""
-	Map LDAP attribute to UDM property.
-
-	:param values: List of LDAP attribute values.
-	:type values: list(str)
-	:return: List of UDM property values.
-	:rtype: list(tuple(str, str, str))
-	"""
-	return [entry.split(' ') for entry in values]
-
-
-def mapSSHFP(properties):
-	"""
-	Map UDM property to LDAP attribute.
-
-	:param properties: List of UDM property values.
-	:type properties: list(tuple(str, str, str))
-	:return: List of LDAP attribute values.
-	:rtype: list(str)
-	"""
-	return [' '.join(entry) for entry in properties]
 
 
 mapping = univention.admin.mapping.mapping()

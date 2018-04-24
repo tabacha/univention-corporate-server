@@ -102,6 +102,30 @@ def stripDot(old):
 	return old[:-1] if isinstance(old, basestring) and old.endswith('.') else old
 
 
+def unmapSSHFP(values):
+	"""
+	Map LDAP attribute to UDM property.
+
+	:param values: List of LDAP attribute values.
+	:type values: list(str)
+	:return: List of UDM property values.
+	:rtype: list(tuple(str, str, str))
+	"""
+	return [entry.split(' ') for entry in values]
+
+
+def mapSSHFP(properties):
+	"""
+	Map UDM property to LDAP attribute.
+
+	:param properties: List of UDM property values.
+	:type properties: list(tuple(str, str, str))
+	:return: List of LDAP attribute values.
+	:rtype: list(str)
+	"""
+	return [' '.join(entry) for entry in properties]
+
+
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()

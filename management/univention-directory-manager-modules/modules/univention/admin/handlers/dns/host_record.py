@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-#
-# Univention Admin Modules
-#  admin module for the dns host records
-#
+"""
+Univention Admin modules for DNS host records
+"""
 # Copyright 2004-2018 Univention GmbH
 #
 # http://www.univention.de/
@@ -38,6 +37,7 @@ import univention.admin.filter
 import univention.admin.handlers
 import univention.admin.handlers.dns.forward_zone
 import univention.admin.localization
+from univention.admin.handlers.dns import unmapSSHFP, mapSSHFP
 
 translation = univention.admin.localization.translation('univention.admin.handlers.dns')
 _ = translation.translate
@@ -104,7 +104,15 @@ property_descriptions = {
 		options=[],
 		required=False,
 		may_change=True
-	)
+	),
+	'fingerprint': univention.admin.property(
+		short_description=_('SSH host key fingerprint'),
+		long_description=_('Fingerprint of the Secure Shell host keys.'),
+		syntax=univention.admin.syntax.dnsSSHFP,
+		multivalue=True,
+		required=True,
+		identifies=False,
+	),
 }
 
 layout = [
@@ -120,6 +128,9 @@ layout = [
 	]),
 	Tab(_('Text'), _('Optional text'), advanced=True, layout=[
 		'txt',
+	]),
+	Tab(_('SSH'), _('Optional SSH host key fingerprints'), advanced=True, layout=[
+		'fingerprint',
 	])
 ]
 
@@ -144,6 +155,7 @@ mapping = univention.admin.mapping.mapping()
 mapping.register('name', 'relativeDomainName', None, univention.admin.mapping.ListToString)
 mapping.register('mx', 'mXRecord', mapMX, unmapMX)
 mapping.register('txt', 'tXTRecord')
+mapping.register('fingerprint', 'sSHFPRecord', mapSSHFP, unmapSSHFP)
 mapping.register('zonettl', 'dNSTTL', univention.admin.mapping.mapUNIX_TimeInterval, univention.admin.mapping.unmapUNIX_TimeInterval)
 
 
