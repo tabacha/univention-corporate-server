@@ -8,7 +8,7 @@
 
 name = 'univention-ssh'
 description = 'Manage list of SSH known hosts from LDAP'
-filter = 'objectClass=univentionHost'
+filter = '(objectClass=univentionHost)'
 attributes = [
 	'univentionSshHostKey',
 	'aRecord',
