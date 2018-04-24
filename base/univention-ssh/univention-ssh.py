@@ -109,7 +109,11 @@ def names(values):
 		yield ip
 	for ip in values.get('aAAARecord', []):
 		ud.debug(ud.LISTENER, ud.PROCESS, "names: IPv6=%s" % (ip,))
-		yield '%s' % (IPv6Address(ip),)
+		yield ip
+		val = '%s' % (IPv6Address(ip),)
+		if ip != val:
+			ud.debug(ud.LISTENER, ud.PROCESS, "names: IPv6=%s" % (val,))
+			yield val
 
 
 class AsRoot(object):
