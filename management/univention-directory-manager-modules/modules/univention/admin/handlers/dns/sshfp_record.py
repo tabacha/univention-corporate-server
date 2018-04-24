@@ -18,11 +18,11 @@ _ = translation.translate
 
 module = 'dns/sshfp_record'
 operations = ['add', 'edit', 'remove', 'search']
-columns = ['location']
+columns = ['fingerprint']
 superordinate = 'dns/forward_zone'
 childs = 0
 short_description = _('DNS: Secure Shell Fingerprint record')
-long_description = _('Resolve well-known services to servers providing those services.')
+long_description = _('Store fingerprint of Secure Shell host keys.')
 options = {
 	'default': univention.admin.option(
 		default=True,
@@ -46,40 +46,53 @@ property_descriptions = {
 		identifies=False,
 		default=(('22', 'hours'), [])
 	),
-	'algorithm': univention.admin.property(
-		short_description=_('Algorithm'),
-		long_description=_('Cryptographic algorithm of the SSH host key.'),
-		syntax=univention.admin.syntax.sshHostKeyAlgorithm,
-		required=True,
-		identifies=False,
-	),
-	'type': univention.admin.property(
-		short_description=_('Fingerprint type'),
-		long_description=_('Fingerprint type used to hash the public SSH host key.'),
-		syntax=univention.admin.syntax.sshHostKeyType,
-		required=True,
-		identifies=False,
-	),
-	'hash': univention.admin.property(
-		short_description=_('Fingerprint hash'),
-		long_description=_('Hash of the public SSH host key.'),
-		syntax=univention.admin.syntax.string,
+	'fingerprint': univention.admin.property(
+		short_description=_('SSH host key fingerprint'),
+		long_description=_('Fingerprint of the Secure Shell host keys.'),
+		syntax=univention.admin.syntax.dnsSSHFP,
+		multivalue=True,
 		required=True,
 		identifies=False,
 	),
 }
 layout = [
 	Tab(_('General'), _('Basic settings'), layout=[
-		Group(_('General service record settings'), layout=[
+		Group(_('SSH host key settings'), layout=[
 			'name',
-			'location',
+			'fingerprint',
 			'zonettl'
 		]),
 	]),
 ]
 
+
+def unmapSSHFP(values):
+	"""
+	Map LDAP attribute to UDM property.
+
+	:param values: List of LDAP attribute values.
+	:type values: list(str)
+	:return: List of UDM property values.
+	:rtype: list(tuple(str, str, str))
+	"""
+	return [entry.split(' ') for entry in values]
+
+
+def mapSSHFP(properties):
+	"""
+	Map UDM property to LDAP attribute.
+
+	:param properties: List of UDM property values.
+	:type properties: list(tuple(str, str, str))
+	:return: List of LDAP attribute values.
+	:rtype: list(str)
+	"""
+	return [' '.join(entry) for entry in properties]
+
+
 mapping = univention.admin.mapping.mapping()
-mapping.register('name', 'relativeDomainName', mapName, unmapName)
+mapping.register('name', 'relativeDomainName', None, univention.admin.mapping.ListToString)
+mapping.register('fingerprint', 'sSHFPRecord', mapSSHFP, unmapSSHFP)
 mapping.register('zonettl', 'dNSTTL', univention.admin.mapping.mapUNIX_TimeInterval, univention.admin.mapping.unmapUNIX_TimeInterval)
 
 
@@ -118,7 +131,7 @@ def lookup(co, lo, filter_s, base='', superordinate=None, scope="sub", unique=Fa
 		univention.admin.filter.conjunction('!', [univention.admin.filter.expression('relativeDomainName', '@')]),
 		univention.admin.filter.conjunction('!', [univention.admin.filter.expression('zoneName', '*.in-addr.arpa')]),
 		univention.admin.filter.conjunction('!', [univention.admin.filter.expression('zoneName', '*.ip6.arpa')]),
-		univention.admin.filter.expression('sRVRecord', '*'),
+		univention.admin.filter.expression('sSHFPRecord', '*'),
 	])
 
 	if superordinate:

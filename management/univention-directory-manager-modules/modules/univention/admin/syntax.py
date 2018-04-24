@@ -3749,6 +3749,16 @@ class sshHostKeyHash(string):
 	error_message = _('Invalid base64 encoded srting')
 
 
+class dnsSSHFP(complex):
+	"""DNS record type for SSH Finger Print"""
+	subsyntaxes = [
+		(_('Algorithm'), sshHostKeyAlgorithm),
+		(_('Fingerprint type'), sshHostKeyType),
+		(_('Fingerprint hash'), sshHostKeyHash),
+	]
+	all_required = True
+
+
 if __name__ == '__main__':
 	import doctest
 	doctest.testmod()
