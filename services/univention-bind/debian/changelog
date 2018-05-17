@@ -1,3 +1,9 @@
+univention-bind (12.0.2-1) unstable; urgency=medium
+
+  * Bug #43689: use systemd services instead of runit
+
+ -- Jürn Brodersen <brodersen@univention.de>  Thu, 17 May 2018 10:57:55 +0200
+
 univention-bind (12.0.1-3) unstable; urgency=medium
 
   * Bug #46206: Fix two problems with 90univention-bind-post.inst
