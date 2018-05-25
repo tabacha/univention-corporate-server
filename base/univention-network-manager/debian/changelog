@@ -1,3 +1,9 @@
+univention-network-manager (10.0.0-4) unstable; urgency=low
+
+  * Bug #44462: Improve DNS handling from DHCP
+
+ -- Philipp Hahn <hahn@univention.de>  Fri, 25 May 2018 17:34:31 +0200
+
 univention-network-manager (10.0.0-3) unstable; urgency=medium
 
   * Bug #41052: ignore lo and docker0 in univention-register-network-address

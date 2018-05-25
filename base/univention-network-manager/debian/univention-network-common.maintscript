@@ -1,2 +1,3 @@
 rm_conffile /etc/network/if-down.d/00_rdate 6.0.1~
 rm_conffile /etc/network/if-up.d/20_mount 6.0.1~
+rm_conffile /etc/dhcp/dhclient-exit-hooks.d/resolvconf 10.0.0-4~
