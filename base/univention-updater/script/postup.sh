@@ -170,6 +170,34 @@ if test -e /etc/systemd/system/atd.service.d/ucs_release_upgrade.conf; then
 	systemctl daemon-reload
 fi
 
+# Bug 46542 - ensure correct ntp init script and run level links
+ntp_init=$(md5sum /etc/init.d/ntp* 2>/dev/null | sed -ne 's|c11e6b1c398746e81b1a4cc160d2bbb2  ||p' | head -1)
+if [ -n "$ntp_init" -a "$ntp_init" != "/etc/init.d/ntp" ]; then
+	test -e /etc/init.d/ntp && mv /etc/init.d/ntp /var/univention-backup/ntp-init-update-to-4.3-0
+	mv "$ntp_init" /etc/init.d/ntp
+	systemctl daemon-reload >>"$UPDATER_LOG" 2>&1
+fi
+if ! ls /etc/rc2.d/ | grep -q ntp; then
+	if [ -e /etc/init.d/ntp ]; then
+		update-rc.d ntp defaults >>"$UPDATER_LOG" 2>&1
+	fi
+fi
+# Bug 46542 - end
+
+/usr/share/univention-directory-manager-tools/univention-migrate-users-to-ucs4.3 >>"$UPDATER_LOG" 2>&1
+
+# Bug #46875: unmask the rpcbind service again after update
+if grep -q '^rpcbind/autostart: no$' /etc/univention/base-forced.conf; then
+	ucr unset --force rpcbind/autostart
+	systemctl daemon-reload
+	if [ -x /usr/sbin/rpcinfo ]; then
+		systemctl restart rpcbind
+		systemctl restart nfs-kernel-server
+		systemctl restart nfs-server
+		systemctl restart quotarpc
+	fi
+fi
+
 echo "
 
 

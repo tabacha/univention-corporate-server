@@ -521,6 +521,20 @@ if [ -x /etc/init.d/nagios-nrpe-server ]; then
 	/etc/init.d/nagios-nrpe-server stop >>"$UPDATER_LOG" 2>&1
 fi
 
+# Bug #46669: Disable Predictable Network Interface Names on upgrades
+case "${grub_append:-}" in
+*net.ifnames=?*) ;;
+*) ucr set grub/append="${grub_append:+$grub_append }net.ifnames=0" ;;
+esac
+
+# Bug #46875: mask the rpcbind service during update
+if [ -x /sbin/rpcbind ]; then
+	is_ucr_true rpcbind/autostart
+	if [ $? -ne 1 ]; then
+		ucr set --force rpcbind/autostart=no
+	fi
+fi
+
 echo ""
 echo "Starting update process, this may take a while."
 echo "Check /var/log/univention/updater.log for more information."
