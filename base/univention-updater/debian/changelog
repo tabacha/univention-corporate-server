@@ -1,3 +1,9 @@
+univention-updater (13.0.1-44) unstable; urgency=medium
+
+  * Bug #37223: Activate and deactivate univention-maintenance-mode
+
+ -- Dirk Wiesenthal <wiesenthal@univention.de>  Thu, 14 Jun 2018 00:00:50 +0200
+
 univention-updater (13.0.1-43) unstable; urgency=medium
 
   * Bug #46850: check for failed.ldif in preup.sh
