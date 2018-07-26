@@ -3,7 +3,7 @@ release: "4.3"
 version: [0, 1]
 scope: ucs_4.3-0-errata4.3-1
 src: univention-appcenter
-fix:
+fix: 7.0.2-12A~4.3.0.201807261705
 desc: |-
   This update addresses the following issue(s):
   * Fix finding the wrong version in the App Cache. This issue could result in
