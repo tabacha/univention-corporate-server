@@ -1,0 +1,11 @@
+product: ucs
+release: "4.3"
+version: [0, 1]
+scope: ucs_4.3-0-errata4.3-1
+src: univention-appcenter
+fix:
+desc: |-
+  This update addresses the following issue(s):
+  * Fix finding the wrong version in the App Cache. This issue could result in
+    Apps being unregistered.
+bug: [47383]
