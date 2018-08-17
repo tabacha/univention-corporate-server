@@ -5,7 +5,7 @@ scope: ucs_4.3-0-errata4.3-1
 src: linux
 fix: 4.9.110-3+deb9u1
 desc: |
- This update addresses the following issue(s):
+ This update addresses the following issues:
  * Integer overflow in events/core.c:perf_cpu_time_max_percent_handler() can
    allow for denial of service (CVE-2017-18255)
  * vhost: Information disclosure in vhost/vhost.c:vhost_new_msg()
@@ -74,6 +74,7 @@ desc: |
    with crafted ext4 image (CVE-2018-1093)
  * Memory leak in drivers/net/wireless/mac80211_hwsim.c:hwsim_new_radio_nl()
    can lead to potential denial of service (CVE-2018-8087)
+note: This is the first of three parts.
 bug: [47490]
 cve:
 - CVE-2017-18255

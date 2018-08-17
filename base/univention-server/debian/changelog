@@ -1,3 +1,21 @@
+univention-server (13.0.0-6) unstable; urgency=low
+
+  * Bug #47581: improved check when to trigger OX schema issue cleanup
+
+ -- Sönke Schwardt-Krummrich <schwardt@univention.de>  Wed, 15 Aug 2018 15:59:21 +0200
+
+univention-server (13.0.0-5) unstable; urgency=low
+
+  * Bug #47581: improved check when to trigger OX schema issue cleanup
+
+ -- Sönke Schwardt-Krummrich <schwardt@univention.de>  Wed, 15 Aug 2018 13:21:51 +0200
+
+univention-server (13.0.0-4) unstable; urgency=low
+
+  * Bug #47581: fix OX schema issue caused by default master packages
+
+ -- Sönke Schwardt-Krummrich <schwardt@univention.de>  Mon, 13 Aug 2018 22:07:52 +0200
+
 univention-server (13.0.0-3) unstable; urgency=medium
 
   * Bug #45909: Remove univention-system-setup from

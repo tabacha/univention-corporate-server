@@ -11,10 +11,6 @@
   <title>Univention App Center for App Provider</title>
 </bookinfo>
 
-<!--
-TODO: Nico
--->
-
 <chapter id="introduction">
     <title>Introduction</title>
 
@@ -32,7 +28,7 @@ TODO: Nico
             known from mobile platforms like Apple or Google. It provides an
             infrastructure to build, deploy and run enterprise applications on
             Univention Corporate Server (UCS). The App Center uses well-known
-            technology like docker.
+            technology like <ulink url="https://www.docker.com/">docker</ulink>.
         </para>
     </section>
 
@@ -87,11 +83,18 @@ TODO: Nico
                         and test their apps.
                     </simpara>
                 </listitem>
+                <listitem>
+                    <simpara>
+                        <emphasis>Univention Corporate Server (UCS)</emphasis>
+                        is the target platform for the app. UCS is technically
+                        a derivative of Debian GNU/Linux.
+                    </simpara>
+                </listitem>
             </itemizedlist>
         </para>
 
         <para>
-            For building an app the app developer deals with the app, the
+            For building an app the app developer deals with UCS, the app, the
             provider portal and the Test App Center.
         </para>
     </section>
@@ -122,8 +125,8 @@ TODO: Nico
                 It is also recommended to publish the docker container to
                 <ulink url="https://hub.docker.com/">docker hub</ulink>. This
                 makes referencing the image later much easier.  The image must
-                have an image tag for version information. It later allows
-                updates for the apps.
+                have a version tag to distinguish different software versions.
+                It later allows updates for the apps.
             </para>
         </section>
 
@@ -139,9 +142,12 @@ TODO: Nico
                <listitem>
                    <simpara>
                        To start building your app, you should first get
-                       yourself an account for the app provider portal.
-                       Please <ulink url="https://www.univention.com/products/univention-app-center/for-solution-providers/">
-                           request your personal account</ulink>.
+                       yourself an account for the app provider portal.  Please
+                       <ulink
+                           url="https://www.univention.com/products/univention-app-center/for-solution-providers/">
+                           request your personal account</ulink> on the
+                       Univention website and provide some context about the
+                       app you have in mind.
                    </simpara>
                </listitem>
                <listitem>
@@ -210,7 +216,8 @@ TODO: Nico
                         <simpara>
                             <emphasis>App Version</emphasis> is the version of
                             your app. The App Center distinguishes versions and
-                            uses them to handle app updates.
+                            uses them to handle app updates. Once the app is
+                            released, this attribut cannot be changed anymore.
                         </simpara>
                     </listitem>
                     <listitem>
@@ -223,8 +230,8 @@ TODO: Nico
                             already been published for UCS 4.2. UCS 4.3 systems
                             may very well use the App - if you specify
                             <literal>SupportedUCSVersion=4.2-0, 4.3-0</literal>
-                            in your 4.2 App. It does not really matter in which
-                            UCS version you are publishing your App. But if you
+                            in your 4.2 App. It does not really matter for
+                            which UCS version you publish your App. But if you
                             are publishing it in various UCS versions, you need
                             to also test various UCS versions.
                         </simpara>
@@ -275,12 +282,14 @@ TODO: Nico
 
             <note>
                 <para>
-                    The App Center does currently not support multi container
-                    setups. The container needs to include all services needed
-                    for the software, except the database.  The App Center
-                    takes care of providing a database management system
-                    directly on the docker host that can be used by the docker
-                    container. Supported are MySQL and PostgreSQL. See <xref
+                    The App Center does currently <ulink
+                        url="https://forge.univention.org/bugzilla/show_bug.cgi?id=43612">not
+                        support multi container setups</ulink>. The container
+                    needs to include all services needed for the software,
+                    except the database.  The App Center takes care of
+                    providing a database management system directly on the
+                    docker host that can be used by the docker container.
+                    Supported are MySQL and PostgreSQL. See <xref
                         linkend="create-app-with-docker:database" />.
                 </para>
             </note>
@@ -290,9 +299,9 @@ TODO: Nico
             <title>Logo and description</title>
             <para>
                 On your app's <guimenu>General</guimenu> tab please provide a
-                description and logos for your software. Start with a short
-                and a long description for your app. It gives an impression on
-                how it will look like during later testing.
+                description and logos for your software. Start with a short and
+                a long description. It gives an impression on how it will look
+                like during later testing.
             </para>
             <para>                
                On the same tab you can upload two logos: A default icon that is
@@ -301,12 +310,11 @@ TODO: Nico
                be more detailed and can for example include the software name.
                Please provide the logos in SVG format.
            </para>
+           <!-- TODO: @Nico: Add note on translation! -->
            <para>
-               Those settings can be changed at any time later.
-           </para>
-           <para>
-               For a more detailed description on the app presentation, please
-               have a look at <xref linkend="app-presentation" />.
+               Those settings can be changed at any time later.  For a more
+               detailed description on the app presentation, please have a look
+               at <xref linkend="app-presentation" />.
            </para>
         </section>
 
@@ -332,7 +340,7 @@ TODO: Nico
             <title>Persistent data with volumes</title>
             <para>
                 By default files created inside a container are stored in it,
-                but they don't persist when the container is no longer running
+                but they don't persist when the container is no longer running,
                 removed or is exchanged with a newer version. As solution
                 docker offers <ulink
                     url="https://docs.docker.com/storage/volumes/">volumes</ulink>,
@@ -381,8 +389,8 @@ TODO: Nico
             <para>
                 In the <guimenu>Web interface</guimenu> section on the
                 <guimenu>General</guimenu> tab in your app, you can enter the
-                relative and which ports should be proxied.  For example to map
-                the containers ports 80 and 443 to
+                relative path and which ports should be proxied.  For example,
+                to map the containers ports 80 and 443 to
                 <userinput>/myapp</userinput>, the following settings have to
                 be made:
                 <itemizedlist>
@@ -421,17 +429,18 @@ TODO: Nico
         <section id="create-app-with-docker:ports">
             <title>Ports</title>
             <para>
-                If your app needs to occupy ports in order work properly, they
-                can be defined in the <guimenu>Port redirection</guimenu>
-                section on the <guimenu>Docker</guimenu> tab. Here you can
-                define a list of ports that the docker host shall exclusively
-                acquire for the docker container. Ports defined here cannot be
-                used by other services on the UCS host or other docker
-                containers on that host.
+                If your app needs to occupy ports on the host that need to be
+                passed along to the container in order work properly, they can
+                be defined in the <guimenu>Port redirection</guimenu> section
+                on the <guimenu>Docker</guimenu> tab. Here you can define a
+                list of ports that the docker host shall exclusively acquire
+                for the docker container. Ports defined here cannot be used by
+                other services or other docker containers on the UCS host.
             </para>
             <para>
-                For example, the solution exposes an API under a dedicated
-                port. This port would be predestined to be defined here.
+                For example, the solution exposes API under the dedicated port
+                <userinput>5555</userinput>. This port would be predestined to
+                be defined here.
             </para>
         </section>
 
@@ -693,36 +702,269 @@ TODO: Stefan
 
 </chapter>
 
-<!--
-TODO: Nico
--->
 <chapter id="app-lifecycle">
     <title>App life cycle</title>
 
     <para>
+        This chapter is about the life cycle of an app from the development,
+        over its life in the public to termination. The life cycle applies to
+        the app overall and to every single version, except the termination.
+        App versions are not explicitely terminated. They are superseded by the
+        next version.
     </para>
+
+    <section id="development">
+        <title>Development</title>
+        <para>
+            Every app starts with the development. It involves the definition
+            of the app in the app provider portal, providing the software
+            solution as docker container and the integration of the solution
+            with UCS, for example in the identity management area. See <xref
+                linkend="get-started" />.
+        </para>
+        <para>
+            Typically, the solution is already available as docker image. The
+            first step therefore is to have this image up and running as
+            container by the App Center. The second step usually handles the
+            integration, usually with the identity management in UCS, see <xref
+                linkend="connection-idm" />.
+        </para>
+    </section>
 
     <section id="testing">
         <title>Testing</title>
         <para>
+            Testing the app is the final part of the development. It typically
+            involves a combination of manual and automatic tests. In order to
+            test your app with UCS, please follow these instructions.
+        </para>
+
+        <section id="testing:download">
+            <title>Download UCS</title>
+            <para>
+                Download UCS to get yourself a copy of UCS free of charge from
+                the <ulink
+                    url="https://www.univention.com/downloads/ucs-download/">Univention
+                    website</ulink>. You can choose an ISO image or a
+                pre-installed virtual machine image for various virtualization
+                hypervisors.
+            </para>
+        </section>
+
+        <section id="testing:setup">
+            <title>Initial UCS setup</title>
+            <para>
+                Please refer to the <ulink
+                    url="https://docs.software-univention.de/quickstart-en.html">UCS
+                    Quickstart Guide</ulink> for the first steps about
+                installation and initial setup.
+            </para>
+        </section>
+
+        <section id="testing:test-app-center">
+            <title>Test App Center</title>
+            <para>
+                Switch to the Test App Center and test your app directly on UCS.
+<programlisting>
+univention-install univention-appcenter-dev
+univention-app dev-use-test-appcenter
+</programlisting>
+            </para>
+        </section>
+
+        <section id="testing:install">
+            <title>Install the app</title>
+            <para>
+                Up until here, your app is available in the Test App Center and
+                you have a UCS system up and running that is configured against
+                the Test App Center. The app can be installed via the &ucsUMC;.
+                UMC consists of several modules and one of them is called
+                <guimenu>App Center</guimenu>. Open this module and install
+                your app from there.
+            </para>
+
+            <para>
+                The following points are mandatory for the App to be published:
+                <itemizedlist>
+                    <listitem>
+                        <simpara>
+                            The App has to install without user interaction.
+                        </simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>
+                            The App may not negatively impact UCS' core services.
+                        </simpara>
+                    </listitem>
+                    <listitem>
+                        <simpara>
+                            The App has to uninstall without leaving any remainders that interfere with UCS' core services.
+                        </simpara>
+                    </listitem>
+                </itemizedlist>
+            </para>
+
+            <para>
+                When installing the App, also mind README information that you
+                may have defined on the <guimenu>README files</guimenu> in your
+                app in the App Provider Portal. An Administrator expects an App
+                to be fully configured after the installation. If something is
+                needed in order to use the App (e.g., activating users for the
+                service), it should be described in the appropriate README
+                section.
+            </para>
+        </section>
+
+        <section id="testing:upgrade">
+            <title>Upgrade the app</title>
+            <para>
+                Once you have several version of the app, the upgrade should be
+                tested, as well. The App Center UMC module only allows the
+                installation of the latest app version. To test an upgrade of
+                your app, please go to the console and installed a version
+                explicitely:
+
+                <programlisting>
+                    univention-app install myapp=1.0
+                </programlisting>
+
+                Afterwards, you can go back to the App Center UMC module.
+                There, your app should show up with the update symbol
+                indicating the availability of an update. Continue and perform
+                the app upgrade.
+            </para>
+        </section>
+
+        <section id="testing:deactive-test-app-center">
+            <title>Deactivate the Test App Center</title>
+            <para>
+                To switch back to the productive App Center, please run:
+
+                <programlisting>
+                    univention-app dev-use-test-appcenter --revert
+                </programlisting>
+            </para>
+        </section>
+
+        <section id="testing:automation-for-providers">
+            <title>Automated testing for App Providers</title>
+            <para>
+                Univention always runs automated tests on an app before it
+                released. This testing infrastructure can be used by the app
+                provider to increase the test coverage for the app. This can
+                drastically safe manual testing efforts.
+            </para>
+
+        <!-- 
+        TODO: Section about how providers can use testing infrastructure for automated tests.
+        -->
+            <para>
+            </para>
+        </section>
+    </section>
+
+    <section id="approval">
+        <title>Two-side approval</title>
+        <para>
+            Testing the app also involves to give an approval for the release
+            of the app. Each app in the App Center requires a two-side approval,
+            one from the app provider and one from Univention. The app provider
+            starts with the process and performs its tests to give the approval
+            for its app.
+        </para>
+        <para>
+            The app provider's approval is given by clicking on
+            <guimenu>Publish App</guimenu> in the App Provider portal. The
+            Univention App Center team is notified and they will start the
+            automated tests. As soon as the automated tests are successful, the
+            second approval is available and the app is ready to be released.
+        </para>
+        <para>
+            The automated tests conducted by Univention test for installation,
+            deinstallation and re-installation of the app for different UCS
+            system roles. They check for proper operation of the UCS services.
+            No app functionality will be tested. It is rather ensured that the
+            app does not break UCS functionality.
         </para>
     </section>
 
-    <section id="first-release">
-        <title>First release</title>
+    <section id="release">
+        <title>Release</title>
         <para>
+            As soon as the app is ready for release, it is copied to the
+            productive App Center by the Univention App Center team. The app
+            will be visible in the App Center UMC module immediately for all
+            UCS users. The app catalog is updated automatically and shows the
+            new app.
+        </para>
+        <para>
+            Besides the technical testing described above, the first release
+            also undergoes a review process on the app presentation. The app
+            description is checked for plausibility, understandability and for
+            the App Center context.
         </para>
     </section>
 
     <section id="updates">
         <title>Updates</title>
         <para>
+            After the release of the first version the app enters the
+            maintenance mode and receives updates from the app provider. The
+            evolution of an app is represented by its version. In order to
+            provide an update for your app, follow these steps:
+            <orderedlist>
+                <listitem>
+                    <simpara>
+                        Go to the <guimenu>Apps</guimenu> UMC module in the app
+                        provider portal and search your app.
+                    </simpara>
+                </listitem>
+                <listitem>
+                    <simpara>
+                        Create a new version of the app: Mouse over the app's
+                        tile, click the menu in the upper right corner of the
+                        tile and select <guimenu>New App Version</guimenu>.
+                    </simpara>
+                </listitem>
+                <listitem>
+                    <simpara>
+                        Enter the values for source and target version. The
+                        provider portal will then copy the source app to the
+                        target.
+                    </simpara>
+                </listitem>
+                <listitem>
+                    <simpara>
+                        Open the new app version and make the appropriate
+                        changes, e.g. the version tag for the docker image.
+                        Usual places for changes involve the scripts and maybe
+                        the integration. Texts and logos should be checked if
+                        they are still up to date.
+                    </simpara>
+                </listitem>
+            </orderedlist>
         </para>
     </section>
 
     <section id="termination">
         <title>Termination (end of life)</title>
         <para>
+            If you as app provider decide to discontinue an app and stop the
+            maintenance, the app can be terminated by setting it end of life.
+            As soon as an app is end of life, users won't be able to install
+            it. Users that already have the app install, will see a
+            notification in the App Center that informs them about the
+            termination and that they should look for alternative solutions.
+        </para>
+        <para>
+            You can terminate the app by going to your app's configuration in
+            the app provider portal. Please go to the
+            <guimenu>Advanced</guimenu> tab to the section <guimenu>Custom
+                entries</guimenu>. Create a new custom entry with the
+            <option>Custom key</option> <userinput>EndOfLife</userinput> and
+            the <option>Custom value</option> <userinput>True</userinput>.
+            Afterwards press <guimenu>Sync to Test App Center</guimenu> and
+            <guimenu>Publish App</guimenu>.
         </para>
     </section>
 
