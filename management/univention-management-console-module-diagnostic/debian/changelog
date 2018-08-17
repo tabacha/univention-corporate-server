@@ -1,3 +1,9 @@
+univention-management-console-module-diagnostic (4.0.0-31) unstable; urgency=medium
+
+  * Bug #47583: Changed Error description of samba-tool ntaclsysvolcheck
+
+ -- Julia Bremer <bremer@univention.de>  Fri, 17 Aug 2018 12:00:54 +0200
+
 univention-management-console-module-diagnostic (4.0.0-30) unstable; urgency=medium
 
   * Bug #46197: Only show samba-tool dbcheck errors as critical
