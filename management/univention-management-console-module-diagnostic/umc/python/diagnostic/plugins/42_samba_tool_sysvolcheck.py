@@ -94,13 +94,13 @@ def run(_umc_instance, rerun=False, fix_log=''):
 	    if not rerun:
 		fix = _('Running `samba-tool ntacl sysvolreset` may help to fix the issue.')
 		error_descriptions.append(fix)
-	        raise Warning(description='\n'.join(error_descriptions), buttons=buttons)
+	    raise Warning(description='\n'.join(error_descriptions), buttons=buttons)
 
-        if rerun:
+            if rerun:
 		fixed = _('`samba-tool ntacl sysvolcheck` found no problems.')
 		error_descriptions.append(fixed)
 		error_descriptions.append(output)
-		raise ProblemFixed(description='\n'.join(error_descriptions))
+	    raise ProblemFixed(description='\n'.join(error_descriptions))
 
 
 if __name__ == '__main__':
