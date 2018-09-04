@@ -895,6 +895,7 @@ define([
 			this._tabContainer.watch('selectedChildWidget', lang.hitch(this, function(name, oldModule, newModule) {
 				this._lastSelectedChild = oldModule;
 				this._updateHeaderColor(oldModule, newModule);
+				this._updateCSSForUDMNavigation(oldModule, newModule);
 
 				if (!newModule.moduleID) {
 					// this is the overview page, not a module
@@ -941,6 +942,20 @@ define([
 			if (newModule.moduleID) {
 				headerColorCss = lang.replace('headerColor-{categoryColor}', newModule);
 				domClass.add(this._header.domNode, headerColorCss);
+			}
+		},
+
+		_updateCSSForUDMNavigation: function(oldModule, newModule) {
+			if (oldModule && oldModule.moduleID === 'udm' && oldModule.moduleFlavor === 'navigation') {
+				// remove navigation specific css
+				domClass.remove(this._topContainer.domNode, 'udmNavigationStyle');
+				console.log('remove navigation specific css');
+			}
+
+			if (newModule.moduleID === 'udm' && newModule.moduleFlavor === 'navigation') {
+				// add navigation specific css
+				domClass.add(this._topContainer.domNode, 'udmNavigationStyle');
+				console.log('add navigation specific css');
 			}
 		},
 

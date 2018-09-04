@@ -159,3 +159,92 @@
 .umc .umcUDMMultiInputEditButton.dijitButtonActive .dijitButtonNode {
 	background-color: rgba(0, 0, 0, 0.16);
 }
+
+
+/* Special style for the navigation module */
+#umcTopContainer.udmNavigationStyle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	/* overflow: hidden; */ /* TODO needed ? */
+	display: flex;
+	flex-direction: column;
+}
+
+.udmNavigationStyle .umcMainTabContainer {
+	flex-grow: 1;
+}
+
+.udmNavigationStyle .dijitStackContainerChildWrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.udmNavigationStyle .umcModule {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.udmNavigationStyle .umcModuleWrapper {
+	flex-grow: 1;
+	position: relative;
+}
+
+.udmNavigationStyle .umcModuleContent {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.udmNavigationStyle .umcModuleContentChildWrapper {
+	height: 100%;
+}
+
+.udmNavigationStyle .umcModuleContent-child {
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+}
+
+.udmNavigationStyle .umcModuleUDM .umcPageNav {
+	margin-bottom: 16px;
+}
+
+.udmNavigationStyle .umcPageNav .umcGridTree {
+	overflow-y: auto;
+	max-height: 100%;
+	margin-bottom: 0;
+}
+
+.udmNavigationStyle .umcPageMain {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 16px;
+}
+
+.udmNavigationStyle .umcPageMain .umcGrid {
+	display: flex;
+	flex-direction: column;
+}
+
+.udmNavigationStyle .umcPageMain .umcGrid .dgrid {
+	display: flex;
+	flex-direction: column;
+}
+
+.udmNavigationStyle .umcPageMain .umcGrid .dgrid-scroller {
+	display: flex;
+	overflow-y: auto;
+}
+
+.udmNavigationStyle .umcPageFooter {
+	display: none;
+}
