@@ -1,5 +1,5 @@
 #!/usr/share/ucs-test/runner python2.7
-## desc: Test example
+## desc: test if users can change their own passwords
 ## roles-not:
 ##  - basesystem
 ## packages:

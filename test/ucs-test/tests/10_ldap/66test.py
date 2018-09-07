@@ -1,5 +1,5 @@
 #!/usr/share/ucs-test/runner python2.7
-## desc: Test example
+## desc: Tests functionality of nested groups
 ## roles-not:
 ##  - basesystem
 ## packages:
