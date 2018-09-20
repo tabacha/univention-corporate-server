@@ -80,27 +80,26 @@ def run(_umc_instance, rerun=False, fix_log=''):
 	cmd = ['samba-tool', 'ntacl', 'sysvolcheck']
 	(success, output) = util.run_with_output(cmd)
 	if not success or output:
-            error = _('`samba-tool ntacl sysvolcheck` returned a problem with the sysvol ACLs.')
-            error_descriptions.append(error)
+			error = _('`samba-tool ntacl sysvolcheck` returned a problem with the sysvol ACLs.')
+			error_descriptions.append(error)
+			if output.find("NT_STATUS_OBJECT_NAME_NOT_FOUND") != -1:
+				outputList=output.splitlines()
+				for x in outputList:
+					if x.find("NT_STATUS_OBJECT_NAME_NOT_FOUND") == -1:
+						error_descriptions.append(x)
+					error_descriptions.append("")
+			else:
+				error_descriptions.append(output)
+			if not rerun:
+				fix = _('Running `samba-tool ntacl sysvolreset` may help to fix the issue.')
+				error_descriptions.append(fix)
+			raise Warning(description='\n'.join(error_descriptions), buttons=buttons)
 
-            if output.find("NT_STATUS_OBJECT_NAME_NOT_FOUND") != -1:
-                outputList=output.splitlines()
-                for x in outputList:
-                    if x.find("NT_STATUS_OBJECT_NAME_NOT_FOUND") == -1:
-                        error_descriptions.append(x)
-                error_descriptions.append("")
-            else:
-                error_descriptions.append(output)
-	    if not rerun:
-		fix = _('Running `samba-tool ntacl sysvolreset` may help to fix the issue.')
-		error_descriptions.append(fix)
-	    raise Warning(description='\n'.join(error_descriptions), buttons=buttons)
-
-            if rerun:
+	if rerun:
 		fixed = _('`samba-tool ntacl sysvolcheck` found no problems.')
 		error_descriptions.append(fixed)
 		error_descriptions.append(output)
-	    raise ProblemFixed(description='\n'.join(error_descriptions))
+	raise ProblemFixed(description='\n'.join(error_descriptions))
 
 
 if __name__ == '__main__':
