@@ -50,16 +50,16 @@ def parsing():
 def main():
 	argst = parsing()
 	valid_input = True
-	
+
 	for x in argst:
 		if x.find(".") != -1:
 			print 'Please enter the test names again, but without file endings'
 			valid_input = False
-	
+
 	if valid_input:
 		if argst is None:
 			raise Exception('You have to choose tests to run by using "{-t <testname>}" or write "-t all" to execute all tests')
-		
+
 		client = Client.get_test_connection()
 		plugins = client.umc_command('diagnostic/query').result
 		

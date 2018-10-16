@@ -1,11 +1,102 @@
-#!/usr/share/ucs-test/runner python
-## desc: Run all diagnostic checks
-## exposure: safe
-## packages: [univention-management-console-module-diagnostic]
+#!/usr/bin/python2.7
 
 import argparse
-from univention.testing.umc import Client
 SKIPPED_TESTS = []
+
+import sys
+import pprint
+
+from univention.lib.umc import Client as _Client
+from univention.config_registry import ConfigRegistry
+
+
+class Client(_Client):
+
+	print_response = True
+	print_request_data = True
+
+	@classmethod
+	def get_test_connection(cls, hostname=None, *args, **kwargs):
+		ucr = ConfigRegistry()
+		ucr.load()
+		username = ucr.get('tests/domainadmin/account')
+		username = username.split(',')[0][len('uid='):]
+		password = ucr.get('tests/domainadmin/pwd')
+		return cls(hostname, username, password, *args, **kwargs)
+
+	def umc_command(self, *args, **kwargs):
+		self.print_request_data = kwargs.pop('print_request_data', True)
+		self.print_response = kwargs.pop('print_response', True)
+		try:
+			return super(Client, self).umc_command(*args, **kwargs)
+		finally:
+			self.print_request_data = True
+			self.print_response = True
+
+	def request(self, method, path, data=None, headers=None):
+		print ''
+		print '*** UMC request: "%s %s" %s' % (method, path, '(%s)' % (data.get('flavor'),) if isinstance(data, dict) else '')
+		if self.print_request_data:
+			print 'UMC request payload: \n%s' % (pprint.pformat(data), )
+		try:
+			response = super(Client, self).request(method, path, data, headers)
+		except:
+			print 'UMC request failed: %s' % (sys.exc_info()[1],)
+			print ''
+			raise
+		if self.print_response:
+			print '*** UMC response: \n%s\n***' % (pprint.pformat(response.data),)
+		else:
+			print '*** UMC reponse received'
+		print ''
+		return response
+import sys
+import pprint
+
+from univention.lib.umc import Client as _Client
+from univention.config_registry import ConfigRegistry
+
+
+class Client(_Client):
+
+	print_response = True
+	print_request_data = True
+
+	@classmethod
+	def get_test_connection(cls, hostname=None, *args, **kwargs):
+		ucr = ConfigRegistry()
+		ucr.load()
+		username = ucr.get('tests/domainadmin/account')
+		username = username.split(',')[0][len('uid='):]
+		password = ucr.get('tests/domainadmin/pwd')
+		return cls(hostname, username, password, *args, **kwargs)
+
+	def umc_command(self, *args, **kwargs):
+		self.print_request_data = kwargs.pop('print_request_data', True)
+		self.print_response = kwargs.pop('print_response', True)
+		try:
+			return super(Client, self).umc_command(*args, **kwargs)
+		finally:
+			self.print_request_data = True
+			self.print_response = True
+
+	def request(self, method, path, data=None, headers=None):
+		print ''
+		print '*** UMC request: "%s %s" %s' % (method, path, '(%s)' % (data.get('flavor'),) if isinstance(data, dict) else '')
+		if self.print_request_data:
+			print 'UMC request payload: \n%s' % (pprint.pformat(data), )
+		try:
+			response = super(Client, self).request(method, path, data, headers)
+		except:
+			print 'UMC request failed: %s' % (sys.exc_info()[1],)
+			print ''
+			raise
+		if self.print_response:
+			print '*** UMC response: \n%s\n***' % (pprint.pformat(response.data),)
+		else:
+			print '*** UMC reponse received'
+		print ''
+		return response
 
 def test_run_diagnostic_checks(client,plugins):
 	failures = []
