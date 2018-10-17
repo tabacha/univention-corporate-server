@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 univention-management-console-module-diagnostic (4.0.1-7) unstable; urgency=medium
 
  * Bug #47844: Ignore kerberos/kdcentry entries for now
@@ -9,6 +10,13 @@ univention-management-console-module-diagnostic (4.0.1-6) unstable; urgency=low
   * Bug #47583: Improved misleading error message in diagnostic module 42_samba_sysvolcheck
 
  -- Julia Bremer <bremer@brankis.knut.univention.de>  Tue, 09 Oct 2018 10:55:53 +0200
+=======
+univention-management-console-module-diagnostic (4.0.1-6) unstable; urgency=medium
+
+  * Bug #47648: Code cleanup
+
+ -- Julia Bremer <jbremer@brankis.knut.univention.de>  Wed, 17 Oct 2018 17:36:53 +0200
+>>>>>>> Bug #47649: Updated version
 
 univention-management-console-module-diagnostic (4.0.1-5) unstable; urgency=low
 
