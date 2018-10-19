@@ -49,7 +49,7 @@ __dn_property_encoder_class_cache = {}
 
 class BaseEncoder(object):
 	static = False  # whether to create an instance or use a class/static method
-	type = None  # type of decoded value
+	type_hint = None  # type of decoded value
 
 	def __init__(self, property_name=None, *args, **kwargs):
 		self.property_name = property_name
@@ -66,7 +66,7 @@ class BaseEncoder(object):
 
 class Base64BinaryPropertyEncoder(BaseEncoder):
 	static = False
-	type = 'Base64Binary'
+	type_hint = 'Base64Binary'
 
 	def decode(self, value=None):
 		if value:
@@ -83,7 +83,7 @@ class Base64BinaryPropertyEncoder(BaseEncoder):
 
 class DatePropertyEncoder(BaseEncoder):
 	static = True
-	type = datetime.date
+	type_hint = datetime.date
 
 	@staticmethod
 	def decode(value=None):
@@ -102,7 +102,7 @@ class DatePropertyEncoder(BaseEncoder):
 
 class DisabledPropertyEncoder(BaseEncoder):
 	static = True
-	type = bool
+	type_hint = bool
 
 	@staticmethod
 	def decode(value=None):
@@ -115,7 +115,7 @@ class DisabledPropertyEncoder(BaseEncoder):
 
 class HomePostalAddressPropertyEncoder(BaseEncoder):
 	static = True
-	type = list, {'street': str, 'zipcode': str, 'city': str}
+	type_hint = list, {'street': str, 'zipcode': str, 'city': str}
 
 	@staticmethod
 	def decode(value=None):
@@ -195,7 +195,7 @@ class SambaGroupTypePropertyEncoder(BaseEncoder):
 
 class SambaLogonHoursPropertyEncoder(BaseEncoder):
 	static = True
-	type = list, str
+	type_hint = list, str
 	_weekdays = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat')
 
 	@classmethod
@@ -257,7 +257,7 @@ class StringIntBooleanPropertyEncoder(BaseEncoder):
 
 class StringIntPropertyEncoder(BaseEncoder):
 	static = False
-	type = int
+	type_hint = int
 
 	def decode(self, value=None):
 		if value is None:
@@ -310,7 +310,7 @@ class DnListPropertyEncoder(BaseEncoder):
 	class DnsList(list):
 		# a list with an additional member variable
 		objs = None
-		type = list, str
+		type_hint = list, str
 
 		def __deepcopy__(self, memodict=None):
 			return list(self)
@@ -471,7 +471,7 @@ class DnPropertyEncoder(BaseEncoder):
 	class DnStr(str):
 		# a string with an additional member variable
 		obj = None
-		type = str
+		type_hint = str
 
 		def __deepcopy__(self, memodict=None):
 			return str(self)
