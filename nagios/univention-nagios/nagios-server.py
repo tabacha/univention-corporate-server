@@ -442,8 +442,8 @@ def handleService(dn, new, old):
 						else:
 							fp.write('    check_command           %s\n' % new['univentionNagiosCheckCommand'][0])
 
-					fp.write('    normal_check_interval   %s\n' % new['univentionNagiosNormalCheckInterval'][0])
-					fp.write('    retry_check_interval    %s\n' % new['univentionNagiosRetryCheckInterval'][0])
+					fp.write('    check_interval          %s\n' % new['univentionNagiosNormalCheckInterval'][0])
+					fp.write('    retry_interval          %s\n' % new['univentionNagiosRetryCheckInterval'][0])
 					fp.write('    max_check_attempts      %s\n' % new['univentionNagiosMaxCheckAttempts'][0])
 					fp.write('    check_period            %s\n' % new['univentionNagiosCheckPeriod'][0])
 					fp.write('    notification_interval   %s\n' % new['univentionNagiosNotificationInterval'][0])
